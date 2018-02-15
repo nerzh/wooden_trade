@@ -53,7 +53,7 @@ module TradeWoodenApi
                         
             TradeWoodenApi.telegram_ids.each do |user|
               bot.send_message(user, text)
-            end if r >= 2
+            end if r >= TradeWoodenApi.signal_percent
             sleep 2
           end
         end
