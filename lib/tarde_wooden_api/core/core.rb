@@ -23,11 +23,11 @@ module TradeWoodenApi
       loop do
         TradeWoodenApi.pairs.each do |main_symbol, slave_symbols|
           slave_symbols.each do |symbol|
-            b = binance.get_pair_price(symbol, main_symbol).to_f.round(12)
-            p = poloniex.get_pair_price(symbol, main_symbol).to_f.round(12)
-            c = cex.get_pair_price(symbol, main_symbol).to_f.round(12)
-            h = huobi.get_pair_price(symbol, main_symbol).to_f.round(12)
-            e = exmo.get_pair_price(symbol, main_symbol).to_f.round(12)
+            b = binance.get_pair_price(symbol, main_symbol).to_f.round(10)
+            p = poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
+            c = cex.get_pair_price(symbol, main_symbol).to_f.round(10)
+            h = huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
+            e = exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
             
             res = {
               b => 'binance',
