@@ -37,7 +37,7 @@ module TradeWoodenApi
               e => 'exmo'
             }
 
-            a = [b,p,c,h].select{ |val| val > 0 }.sort
+            a = res.keys.select{ |val| val > 0 }.sort
             if a.first <= 0
               sleep 2
               next
