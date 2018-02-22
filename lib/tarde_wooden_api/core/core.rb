@@ -1,7 +1,7 @@
 module TradeWoodenApi
   class Core
 
-    attr_accessor :bot, :binance, :cex, :poloniex, :huobi
+    attr_accessor :bot, :binance, :cex, :poloniex, :huobi, :exmo
 
     def initialize(bot)
       binance  = TradeWoodenApi.binance
