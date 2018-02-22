@@ -8,12 +8,14 @@ module TradeWoodenApi
       cex      = TradeWoodenApi.cex
       poloniex = TradeWoodenApi.poloniex
       huobi    = TradeWoodenApi.huobi
+      exmo     = TradeWoodenApi.exmo
 
       self.binance  = TradeWoodenApi::Binance::Rest.new(binance[:api_url], binance[:api_key], binance[:secret])
       self.cex      = TradeWoodenApi::Cex::Rest.new(cex[:id], cex[:api_url], cex[:api_key], cex[:secret])
       self.poloniex = TradeWoodenApi::Poloniex::Rest.new(poloniex[:api_url], poloniex[:api_key], poloniex[:secret])
       self.huobi    = TradeWoodenApi::Huobi::Rest.new(huobi[:api_url])
-      self.bot = bot
+      self.exmo     = TradeWoodenApi::Exmo::Rest.new(exmo[:api_url])
+      self.bot      = bot
     end
 
     def call
@@ -25,12 +27,14 @@ module TradeWoodenApi
             p = poloniex.get_pair_price(symbol, main_symbol).to_f
             c = cex.get_pair_price(symbol, main_symbol).to_f
             h = huobi.get_pair_price(symbol, main_symbol).to_f
+            e = exmo.get_pair_price(symbol, main_symbol).to_f
             
             res = {
               b => 'binance',
               p => 'poloniex',
               c => 'cex',
-              h => 'huobi'
+              h => 'huobi',
+              e => 'exmo'
             }
 
             a = [b,p,c,h].select{ |val| val > 0 }.sort
@@ -41,13 +45,14 @@ module TradeWoodenApi
               r = (a.last * 100)/a.first - 100
             end
 
-            text = "#{symbol}/#{main_symbol}%0A"\
-            "binance - #{b}%0A"\
-            "poloniex - #{p}%0A"\
-            "cex - #{c}%0A"\
-            "huobi - #{h}%0A"\
-            "----------------------------%0A"\
-            "min: #{res[a.first]} < max: #{res[a.last]}%0A"\
+            text = "#{symbol}/#{main_symbol}%0A"
+            res.each { |price, name| text << "#{name} - #{price}%0A" }
+            # "binance - #{b}%0A"\
+            # "poloniex - #{p}%0A"\
+            # "cex - #{c}%0A"\
+            # "huobi - #{h}%0A"\
+            text << "----------------------------%0A"\
+            "#{res[a.first]} < #{res[a.last]}%0A"\
             "max difference #{r.round(5)} %%0A"\
             "----------------------------"
                         
