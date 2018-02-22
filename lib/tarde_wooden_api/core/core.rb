@@ -46,7 +46,7 @@ module TradeWoodenApi
             end
 
             text = "#{symbol}/#{main_symbol}%0A"
-            res.each { |price, name| text << "#{name} - #{price}%0A" }
+            res.each { |price, name| text << "#{name} - #{price}%0A" if price > 0 }
             # "binance - #{b}%0A"\
             # "poloniex - #{p}%0A"\
             # "cex - #{c}%0A"\
