@@ -39,7 +39,7 @@ module TradeWoodenApi
 
             a = res.keys.select{ |val| val > 0 }.sort
             if a.first <= 0
-              sleep 2
+              sleep TradeWoodenApi.latency
               next
             else
               r = (a.last * 100)/a.first - 100
@@ -47,10 +47,6 @@ module TradeWoodenApi
 
             text = "#{symbol}/#{main_symbol}%0A"
             res.each { |price, name| text << "#{name} - #{price}%0A" if price > 0 }
-            # "binance - #{b}%0A"\
-            # "poloniex - #{p}%0A"\
-            # "cex - #{c}%0A"\
-            # "huobi - #{h}%0A"\
             text << "----------------------------%0A"\
             "#{res[a.first]} < #{res[a.last]}%0A"\
             "max difference #{r.round(5)} %%0A"\
@@ -59,7 +55,7 @@ module TradeWoodenApi
             TradeWoodenApi.telegram_ids.each do |user|
               bot.send_message(user, text)
             end if r >= TradeWoodenApi.signal_percent
-            sleep 2
+            sleep TradeWoodenApi.latency
           end
         end
       end

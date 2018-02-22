@@ -17,7 +17,7 @@ require "tarde_wooden_api/core/core"
 module TradeWoodenApi
   class << self
     attr_accessor :binance, :cex, :poloniex, :huobi, :exmo
-    attr_accessor :api_key, :secret, :tlgrm_bot_token, :telegram_ids, :pairs, :signal_percent
+    attr_accessor :api_key, :secret, :tlgrm_bot_token, :telegram_ids, :pairs, :signal_percent, :latency
   end
 
   def self.configurate
