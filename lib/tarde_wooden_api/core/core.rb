@@ -21,42 +21,49 @@ module TradeWoodenApi
     def call
       user = TradeWoodenApi.telegram_ids.first
       loop do
-        TradeWoodenApi.pairs.each do |main_symbol, slave_symbols|
-          slave_symbols.each do |symbol|
-            b = binance.get_pair_price(symbol, main_symbol).to_f.round(10)
-            p = poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
-            c = cex.get_pair_price(symbol, main_symbol).to_f.round(10)
-            h = huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
-            e = exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
-            
-            res = {
-              b => 'binance',
-              p => 'poloniex',
-              c => 'cex',
-              h => 'huobi',
-              e => 'exmo'
-            }
+        begin
+          TradeWoodenApi.pairs.each do |main_symbol, slave_symbols|
+            slave_symbols.each do |symbol|
+              b = binance.get_pair_price(symbol, main_symbol).to_f.round(10)
+              p = poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
+              c = cex.get_pair_price(symbol, main_symbol).to_f.round(10)
+              h = huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
+              e = exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
+              
+              res = {
+                b => 'binance',
+                p => 'poloniex',
+                c => 'cex',
+                h => 'huobi',
+                e => 'exmo'
+              }
 
-            a = res.keys.select{ |val| val > 0 }.sort
-            if a.empty? or a.first <= 0
+              a = res.keys.select{ |val| val > 0 }.sort
+              # if a.empty? or a.first <= 0
+              if a.first <= 0
+                sleep TradeWoodenApi.latency
+                next
+              else
+                r = (a.last * 100)/a.first - 100
+              end
+
+              text = "#{symbol}/#{main_symbol}%0A"
+              res.each { |price, name| text << "#{name} - #{price}%0A" if price > 0 }
+              text << "----------------------------%0A"\
+              "#{res[a.first]} < #{res[a.last]}%0A"\
+              "max difference #{r.round(5)} %%0A"\
+              "----------------------------"
+                          
+              TradeWoodenApi.telegram_ids.each do |user|
+                bot.send_message(user, text)
+              end if r >= TradeWoodenApi.signal_percent
               sleep TradeWoodenApi.latency
-              next
-            else
-              r = (a.last * 100)/a.first - 100
             end
-
-            text = "#{symbol}/#{main_symbol}%0A"
-            res.each { |price, name| text << "#{name} - #{price}%0A" if price > 0 }
-            text << "----------------------------%0A"\
-            "#{res[a.first]} < #{res[a.last]}%0A"\
-            "max difference #{r.round(5)} %%0A"\
-            "----------------------------"
-                        
-            TradeWoodenApi.telegram_ids.each do |user|
-              bot.send_message(user, text)
-            end if r >= TradeWoodenApi.signal_percent
-            sleep TradeWoodenApi.latency
           end
+        rescue => ex
+          TradeWoodenApi.telegram_ids.each do |user|
+            bot.send_message(user, 'Хозяин, вся эта хуита на сервере хотела ебануться, но я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель')
+          end if r >= TradeWoodenApi.signal_percent
         end
       end
     end
