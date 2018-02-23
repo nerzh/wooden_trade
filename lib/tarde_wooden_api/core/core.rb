@@ -38,7 +38,7 @@ module TradeWoodenApi
             }
 
             a = res.keys.select{ |val| val > 0 }.sort
-            if a.first <= 0
+            if a.empty? or a.first <= 0
               sleep TradeWoodenApi.latency
               next
             else
