@@ -41,8 +41,7 @@ module TradeWoodenApi
               }
 
               a = res.keys.select{ |val| val > 0 }.sort
-              # if a.empty? or a.first <= 0
-              if a.first <= 0
+              if a.empty? or a.first <= 0
                 sleep TradeWoodenApi.latency
                 next
               else
@@ -64,7 +63,7 @@ module TradeWoodenApi
           end
         rescue => ex
           TradeWoodenApi.telegram_ids.each do |user|
-            bot.send_message(user, URI::encode("Хозяин, вся эта хуита на сервере хотела ебануться, тошо: #{ex.message}%0AНо я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель"))
+            bot.send_message(user, URI::encode("Хозяин, вся эта хуита на сервере хотела ебануться, тошо: #{ex.message}\nНо я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель"))
           end
         end
       end
