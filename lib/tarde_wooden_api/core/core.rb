@@ -1,3 +1,5 @@
+require 'uri'
+
 module TradeWoodenApi
   class Core
 
@@ -62,7 +64,7 @@ module TradeWoodenApi
           end
         rescue => ex
           TradeWoodenApi.telegram_ids.each do |user|
-            bot.send_message(user, "Хозяин, вся эта хуита на сервере хотела ебануться, тошо: #{ex.message}%0AНо я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель".encode("UTF-8"))
+            bot.send_message(user, URI::encode("Хозяин, вся эта хуита на сервере хотела ебануться, тошо: #{ex.message}%0AНо я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель"))
           end
         end
       end
