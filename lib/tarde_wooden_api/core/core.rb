@@ -62,7 +62,7 @@ module TradeWoodenApi
           end
         rescue => ex
           TradeWoodenApi.telegram_ids.each do |user|
-            bot.send_message(user, 'Хозяин, вся эта хуита на сервере хотела ебануться, тошо: #{ex.message}%0AНо я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель')
+            bot.send_message(user, "Хозяин, вся эта хуита на сервере хотела ебануться, тошо: #{ex.message}%0AНо я ее, вроде, восстановил! Хорошо вам побарыжить, мой повелитель")
           end
         end
       end
