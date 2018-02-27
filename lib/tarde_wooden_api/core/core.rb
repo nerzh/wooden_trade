@@ -50,8 +50,8 @@ module TradeWoodenApi
 
               text = "#{symbol}/#{main_symbol} - #{r.round(2)} %%0A"
               text << "#{res[a.first]} < #{res[a.last]}%0A"
-              text << "-----------------------------%0A"\
-              res.each { |price, name| text << "#{price.round(max_price_length(res))} - #{name}%0A" if price > 0 }
+              text << "-----------------------------%0A"
+              res.each { |price, name| text << "#{ price.round( max_price_length(res) ) } - #{name}%0A" if price > 0 }
               "max difference #{r.round(10)} %%0A"\
               "-----------------------------"
                           
