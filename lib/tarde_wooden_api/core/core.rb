@@ -48,7 +48,7 @@ module TradeWoodenApi
                 r = (a.last * 100)/a.first - 100
               end
 
-              text = "#{symbol}/#{main_symbol}%0A - #{r.round(2)} %"
+              text = "#{symbol}/#{main_symbol} - #{r.round(2)} %%0A"
               res.each { |price, name| text << "#{name} - #{price}%0A" if price > 0 }
               text << "----------------------------%0A"\
               "#{res[a.first]} < #{res[a.last]}%0A"\
