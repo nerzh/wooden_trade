@@ -48,12 +48,12 @@ module TradeWoodenApi
                 r = (a.last * 100)/a.first - 100
               end
 
-              text = "#{symbol}/#{main_symbol}%0A - #{r.round(2)} %"
-              res.each { |price, name| text << "#{name} - #{price}%0A" if price > 0 }
-              text << "----------------------------%0A"\
-              "#{res[a.first]} < #{res[a.last]}%0A"\
-              "max difference #{r.round(5)} %%0A"\
-              "----------------------------"
+              text = "#{symbol}/#{main_symbol} - #{r.round(2)} %%0A"
+              text << "#{res[a.first]} < #{res[a.last]}%0A"
+              text << "-----------------------------%0A"\
+              res.each { |price, name| text << "#{price.round(max_price_length(res))} - #{name}%0A" if price > 0 }
+              "max difference #{r.round(10)} %%0A"\
+              "-----------------------------"
                           
               TradeWoodenApi.telegram_ids.each do |user|
                 bot.send_message(user, text)
@@ -67,6 +67,12 @@ module TradeWoodenApi
           end
         end
       end
+    end
+
+    def max_price_length(res)
+      l = nil
+      res.each { |price, name| l ||= price; l = price if price.to_s.size < l.to_s.size }
+      l
     end
   end
 end
