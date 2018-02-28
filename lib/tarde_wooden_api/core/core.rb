@@ -71,7 +71,7 @@ module TradeWoodenApi
 
     def max_price_length(res)
       l = nil
-      res.each { |price, name| l ||= price; l = price if price.to_s.size < l.to_s.size }
+      res.each { |price, name| l ||= price.to_s.size; l = price.to_s.size if (price > 0 and price.to_s.size < l.to_s.size) }
       l
     end
   end
