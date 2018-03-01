@@ -48,14 +48,11 @@ module TradeWoodenApi
                 r = (a.last * 100)/a.first - 100
               end
 
-              text = "#{symbol}/#{main_symbol} - #{r.round(2)} %\n"
+              text = "#{symbol}/#{main_symbol} - #{r.round(4)} %\n"
               text << "#{res[a.first]} < #{res[a.last]}\n"
               text << "-----------------------------\n"
-              # res.each { |price, name| text << "#{ price.round( max_price_length(res) ) } - #{name}\n" if price > 0 }
-              res.sort.each { |price, name| text << "#{ make_price_string(res, price) } - #{name}\n" if price > 0 }
-              text << "max difference #{r.round(10)} %\n"
-              text << "-----------------------------"
-                          
+              res.sort.each { |price, name| text << "#{make_string(res.keys, price.to_s)} - #{make_string(res.values, name)} - #{get_percent(get_min_price(res.keys), price).round(2) } %\n" if price > 0 }
+                                    
               TradeWoodenApi.telegram_ids.each do |user|
                 bot.send_message(user, URI::encode(text))
               end if r >= TradeWoodenApi.signal_percent
@@ -70,22 +67,30 @@ module TradeWoodenApi
       end
     end
 
-    def max_price_length(res)
+    def max_length(arr_str)
       l = nil
-      res.each do |price, name| 
+      arr_str.each do |price|
         l ||= price.to_s.size
         l   = price.to_s.size if price.to_s.size > l
       end
       l
     end
 
-    def make_price_string(all_price, price)
-      string = price.to_s
-      max    = max_price_length(all_price)
-      if price.to_s.size < max
-        (max - price.to_s.size).times { string << ' ' }
-      end
+    def make_string(all_string, string)
+      string = string + ''
+      max = max_length(all_string)
+      (max - string.size).times { string << '  ' }
       string
+    end
+
+    def get_percent(price, price2)
+      (price2*100)/price - 100
+    end
+
+    def get_min_price(array)
+      min = 0
+      array.sort.each { |val| (min = val; break) if val > 0 }
+      min
     end
   end
 end
