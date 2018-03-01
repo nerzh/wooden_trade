@@ -48,15 +48,16 @@ module TradeWoodenApi
                 r = (a.last * 100)/a.first - 100
               end
 
-              text = "#{symbol}/#{main_symbol} - #{r.round(2)} %%0A"
-              text << "#{res[a.first]} < #{res[a.last]}%0A"
-              text << "-----------------------------%0A"
-              res.each { |price, name| text << "#{ price.round( max_price_length(res) ) } - #{name}%0A" if price > 0 }
-              "max difference #{r.round(10)} %%0A"\
-              "-----------------------------"
+              text = "#{symbol}/#{main_symbol} - #{r.round(2)} %\n"
+              text << "#{res[a.first]} < #{res[a.last]}\n"
+              text << "-----------------------------\n"
+              # res.each { |price, name| text << "#{ price.round( max_price_length(res) ) } - #{name}\n" if price > 0 }
+              res.sort.each { |price, name| text << "#{ make_price_string(res, price) ) } - #{name}\n" if price > 0 }
+              text << "max difference #{r.round(10)} %\n"
+              text << "-----------------------------"
                           
               TradeWoodenApi.telegram_ids.each do |user|
-                bot.send_message(user, text)
+                bot.send_message(user, URI::encode(text))
               end if r >= TradeWoodenApi.signal_percent
               sleep TradeWoodenApi.latency
             end
@@ -71,8 +72,32 @@ module TradeWoodenApi
 
     def max_price_length(res)
       l = nil
-      res.each { |price, name| l ||= price.to_s.size; l = price.to_s.size if (price > 0 and price.to_s.size < l.to_s.size) }
+      res.each do |price, name| 
+        l ||= price.to_s.size
+        l   = price.to_s.size if price.to_s.size > l
+      end
       l
+    end
+
+    def make_price_string(all_price, price)
+      string = price.to_s
+      max    = max_price_length(all_price)
+      if price.to_s.size < max
+        (max - price.to_s.size).time { string << ' ' }
+      end
     end
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
