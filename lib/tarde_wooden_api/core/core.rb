@@ -52,7 +52,7 @@ module TradeWoodenApi
               text << "#{res[a.first]} < #{res[a.last]}\n"
               text << "-----------------------------\n"
               # res.each { |price, name| text << "#{ price.round( max_price_length(res) ) } - #{name}\n" if price > 0 }
-              res.sort.each { |price, name| text << "#{ make_price_string(res, price) ) } - #{name}\n" if price > 0 }
+              res.sort.each { |price, name| text << "#{ make_price_string(res, price) } - #{name}\n" if price > 0 }
               text << "max difference #{r.round(10)} %\n"
               text << "-----------------------------"
                           
