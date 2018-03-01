@@ -83,8 +83,9 @@ module TradeWoodenApi
       string = price.to_s
       max    = max_price_length(all_price)
       if price.to_s.size < max
-        (max - price.to_s.size).time { string << ' ' }
+        (max - price.to_s.size).times { string << ' ' }
       end
+      string
     end
   end
 end
