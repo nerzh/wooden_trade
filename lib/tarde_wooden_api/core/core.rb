@@ -3,7 +3,7 @@ require 'uri'
 module TradeWoodenApi
   class Core
 
-    attr_accessor :bot, :binance, :cex, :poloniex, :huobi, :exmo
+    attr_accessor :bot, :binance, :cex, :poloniex, :huobi, :kraken, :exmo
 
     def initialize(bot)
       binance  = TradeWoodenApi.binance
@@ -11,12 +11,14 @@ module TradeWoodenApi
       poloniex = TradeWoodenApi.poloniex
       huobi    = TradeWoodenApi.huobi
       exmo     = TradeWoodenApi.exmo
+      kraken   = TradeWoodenApi.kraken
 
       self.binance  = TradeWoodenApi::Binance::Rest.new(binance[:api_url], binance[:api_key], binance[:secret])
       self.cex      = TradeWoodenApi::Cex::Rest.new(cex[:id], cex[:api_url], cex[:api_key], cex[:secret])
       self.poloniex = TradeWoodenApi::Poloniex::Rest.new(poloniex[:api_url], poloniex[:api_key], poloniex[:secret])
       self.huobi    = TradeWoodenApi::Huobi::Rest.new(huobi[:api_url])
       self.exmo     = TradeWoodenApi::Exmo::Rest.new(exmo[:api_url])
+      self.kraken   = TradeWoodenApi::Kraken::Rest.new(kraken[:api_url])
       self.bot      = bot
     end
 
@@ -37,7 +39,8 @@ module TradeWoodenApi
                 p => 'poloniex',
                 c => 'cex',
                 h => 'huobi',
-                e => 'exmo'
+                e => 'exmo',
+                k => 'kraken'
               }
 
               a = res.keys.select{ |val| val > 0 }.sort
@@ -54,6 +57,7 @@ module TradeWoodenApi
               res.sort.each { |price, name| text << "#{make_string(res.keys, price.to_s)} - #{make_string(res.values, name)} - #{get_percent(get_min_price(res.keys), price).round(2) } %\n" if price > 0 }
                                     
               TradeWoodenApi.telegram_ids.each do |user|
+                # text = "Гав! Гав! Позовите хозяина, эти биржи меня обижают: Error: You are blocked. Еxceeded limit"
                 bot.send_message(user, URI::encode(text))
               end if r >= TradeWoodenApi.signal_percent
               sleep TradeWoodenApi.latency

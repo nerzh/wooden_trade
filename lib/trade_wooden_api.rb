@@ -10,18 +10,25 @@ require "tarde_wooden_api/exchange/binance/binance"
 require "tarde_wooden_api/exchange/poloniex/poloniex"
 require "tarde_wooden_api/exchange/cex/cex"
 require "tarde_wooden_api/exchange/huobi/huobi"
+require "tarde_wooden_api/exchange/kraken/kraken"
 require "tarde_wooden_api/exchange/exmo/exmo"
 
 require "tarde_wooden_api/core/core"
 
 module TradeWoodenApi
   class << self
-    attr_accessor :binance, :cex, :poloniex, :huobi, :exmo
+    attr_accessor :binance, :cex, :poloniex, :huobi, :kraken, :exmo
     attr_accessor :api_key, :secret, :tlgrm_bot_token, :telegram_ids, :pairs, :signal_percent, :latency
   end
 
   def self.configurate
-    self.binance, self.cex, self.poloniex, self.huobi, self.exmo = {}, {}, {}, {}, {}
+    self.binance  = {}
+    self.cex      = {}
+    self.poloniex = {}
+    self.huobi    = {}
+    self.kraken   = {}
+    self.exmo     = {}
+    
     yield(self)
   end
 end
