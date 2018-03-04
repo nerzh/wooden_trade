@@ -22,7 +22,7 @@ module TradeWoodenApi
       def get_pair(symbol_1, symbol_2)
         symbol_2   = symbol_2.upcase.gsub(/BTC/, 'XBT')
         url        = '/public/Ticker'
-        uri        = "#{api_url}#{url}?pair=#{symbol_2}#{symbol_1}"
+        uri        = "#{api_url}#{url}?pair=#{symbol_1}#{symbol_2}"
         response   = JSON.parse(get_request(uri))
         response['result']["X#{symbol_1}X#{symbol_2}"]
       rescue => ex
