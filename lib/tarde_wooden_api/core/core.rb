@@ -32,6 +32,7 @@ module TradeWoodenApi
               p = poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
               c = cex.get_pair_price(symbol, main_symbol).to_f.round(10)
               h = huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
+              k = kraken.get_pair_price(symbol, main_symbol).to_f.round(10)
               e = exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
               
               res = {
