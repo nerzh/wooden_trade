@@ -5,7 +5,7 @@ module TradeWoodenApi
 
       attr_accessor :api_url, :api_key, :secret
 
-      def initialize(api_url, api_key, secret)
+      def initialize(api_url, api_key='', secret='')
         self.api_url = api_url
         self.api_key = api_key
         self.secret  = secret
