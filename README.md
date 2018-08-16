@@ -80,6 +80,9 @@ trade.call() do |trade_wooden_api|
       h = trade_wooden_api.huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
       k = trade_wooden_api.kraken.get_pair_price(symbol, main_symbol).to_f.round(10)
       e = trade_wooden_api.exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
+      p h
+      p k
+      p e
     end
   end
 
