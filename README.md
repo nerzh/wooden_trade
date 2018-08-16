@@ -22,7 +22,66 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'trade_wooden_api'
+
+TradeWoodenApi.configurate { |conf|
+  # main loop latency
+  conf.latency         = 0.3
+
+  conf.pairs = {
+    "BTC" => [
+      'ETC', 'LTC', 'XRP', 'ZEC', 'TRX', 'XLM', 'ADA', 'BNB', 'EOS', 'BCC', 'ADX', 'VIB', 'VTC',
+      'RPL', 'LSK', 'OMG', 'STRAT', 'WAVES', 'ZRX', 'GAS'
+    ]
+  }
+  
+  # binance
+  conf.binance[:api_url] = 'https://api.binance.com'
+  conf.binance[:api_key] = 'api_key'
+  conf.binance[:secret]  = 'secret'
+
+  # cex
+  conf.cex[:api_url] = 'https://cex.io'
+  conf.cex[:id]      = 'id'
+  conf.cex[:api_key] = 'api_key'
+  conf.cex[:secret]  = 'secret'
+
+  # poloniex
+  conf.poloniex[:api_url] = 'https://poloniex.com'
+  conf.poloniex[:api_key] = 'api_key'
+  conf.poloniex[:secret]  = 'secret'
+
+  # huobi
+  conf.huobi[:api_url] = 'https://api.huobi.pro'
+
+  # kraken
+  conf.kraken[:api_url] = 'https://api.kraken.com/0'
+
+  # exmo
+  conf.exmo[:api_url] = 'https://api.exmo.com/v1'
+}
+
+bot   = TradeWoodenApi::Telegram::Bot.new(TradeWoodenApi.tlgrm_bot_token)
+trade = TradeWoodenApi::Core.new(bot)
+
+
+# example main loop
+trade.call() do |trade_wooden_api|
+
+  TradeWoodenApi.pairs.each do |main_symbol, slave_symbols|
+    slave_symbols.each do |symbol|
+      b = trade_wooden_api.binance.get_pair_price(symbol, main_symbol).to_f.round(10)
+      p = trade_wooden_api.poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
+      c = trade_wooden_api.cex.get_pair_price(symbol, main_symbol).to_f.round(10)
+      h = trade_wooden_api.huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
+      k = trade_wooden_api.kraken.get_pair_price(symbol, main_symbol).to_f.round(10)
+      e = trade_wooden_api.exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
+    end
+  end
+
+end
+```
 
 ## Development
 

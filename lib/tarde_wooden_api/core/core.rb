@@ -5,7 +5,7 @@ module TradeWoodenApi
 
     attr_accessor :bot, :binance, :cex, :poloniex, :huobi, :kraken, :exmo
 
-    def initialize(bot)
+    def initialize(bot=nil)
       binance  = TradeWoodenApi.binance
       cex      = TradeWoodenApi.cex
       poloniex = TradeWoodenApi.poloniex
