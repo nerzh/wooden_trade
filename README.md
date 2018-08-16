@@ -62,18 +62,21 @@ TradeWoodenApi.configurate { |conf|
   conf.exmo[:api_url] = 'https://api.exmo.com/v1'
 }
 
-bot   = TradeWoodenApi::Telegram::Bot.new(TradeWoodenApi.tlgrm_bot_token)
-trade = TradeWoodenApi::Core.new(bot)
+# if need send to telegram
+# bot   = TradeWoodenApi::Telegram::Bot.new(TradeWoodenApi.tlgrm_bot_token)
+# trade = TradeWoodenApi::Core.new(bot)
 
+
+trade = TradeWoodenApi::Core.new()
 
 # example main loop
 trade.call() do |trade_wooden_api|
 
   TradeWoodenApi.pairs.each do |main_symbol, slave_symbols|
     slave_symbols.each do |symbol|
-      b = trade_wooden_api.binance.get_pair_price(symbol, main_symbol).to_f.round(10)
-      p = trade_wooden_api.poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
-      c = trade_wooden_api.cex.get_pair_price(symbol, main_symbol).to_f.round(10)
+      # b = trade_wooden_api.binance.get_pair_price(symbol, main_symbol).to_f.round(10)
+      # p = trade_wooden_api.poloniex.get_pair_price(symbol, main_symbol).to_f.round(10)
+      # c = trade_wooden_api.cex.get_pair_price(symbol, main_symbol).to_f.round(10)
       h = trade_wooden_api.huobi.get_pair_price(symbol, main_symbol).to_f.round(10)
       k = trade_wooden_api.kraken.get_pair_price(symbol, main_symbol).to_f.round(10)
       e = trade_wooden_api.exmo.get_pair_price(symbol, main_symbol).to_f.round(10)
